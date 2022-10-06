@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const { regularExpression } = require('../utils/utils');
 
 const movieSchema = new mongoose.Schema({

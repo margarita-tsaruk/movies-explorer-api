@@ -20,3 +20,13 @@ async function main() {
 }
 
 main();
+
+app.use(express.json());
+
+app.use(require('./routes/routes'));
+
+app.use('/', require('./middlewares/auth'));
+
+app.use('/', require('./routes/users'));
+app.use('/', require('./routes/movies'));
+app.use('*', require('./routes/notCorrectPath'));
