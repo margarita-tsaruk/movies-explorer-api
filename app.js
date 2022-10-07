@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 
 const { PORT = 3000 } = process.env;
 const app = express();
+const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorHandler = require('./errors/errorhandler');
 
 async function main() {
   try {
@@ -22,6 +25,7 @@ async function main() {
 main();
 
 app.use(express.json());
+app.use(requestLogger);
 
 app.use(require('./routes/routes'));
 
@@ -30,3 +34,7 @@ app.use('/', require('./middlewares/auth'));
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/movies'));
 app.use('*', require('./routes/notCorrectPath'));
+
+app.use(errorLogger);
+app.use(errors());
+app.use(errorHandler);
