@@ -1,8 +1,8 @@
 const allowedCors = [
-  'https://mesto.margarita-tsaruk.nomoredomains.sbs',
-  'https://api.margarita-tsaruk.nomoredomains.sbs',
-  'http://mesto.margarita-tsaruk.nomoredomains.sbs',
-  'http://api.margarita-tsaruk.nomoredomains.sbs',
+  'https://movies-explorer.m-ts.nomoredomains.icu',
+  'https://api.movies-explorer.m-ts.nomoredomains.icu',
+  'http://movies-explorer.m-ts.nomoredomains.icu',
+  'http://api.movies-explorer.m-ts.nomoredomains.icu',
   'localhost:3000',
   'localhost:3001',
 ];

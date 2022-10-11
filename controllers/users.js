@@ -70,7 +70,7 @@ function signout(req, res, next) {
       next(new ErrorReqNotFound('Пользователь с указанным _id не найден'));
       return;
     }
-    res.clearCookie('jwt').send({ message: 'Ok' }).end();
+    res.clearCookie('jwt').send({ message: 'Signout is successful' }).end();
   } catch (err) {
     next(err);
   }
@@ -100,7 +100,9 @@ const updateUser = (req, res, next) => {
   })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.code === 11000) {
+        next(new ErrorExistingUser('Пользователь с таким email уже существует'));
+      } else if (err.name === 'ValidationError') {
         next(new ErrorBadReq('Переданы некорректные данные при обновлении профиля'));
       } else {
         next(err);

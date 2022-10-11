@@ -4,27 +4,27 @@ const { regularExpression } = require('../utils/utils');
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
-    required: [true, 'Поле "страна" должно быть заполнено'],
+    required: true,
   },
   director: {
     type: String,
-    required: [true, 'Поле "режиссер" должно быть заполнено'],
+    required: true,
   },
   duration: {
     type: Number,
-    required: [true, 'Поле "длительность фильма" должно быть заполнено'],
+    required: true,
   },
   year: {
     type: String,
-    required: [true, 'Поле "год фильма" должно быть заполнено'],
+    required: true,
   },
   description: {
     type: String,
-    required: [true, 'Поле "описание фильма" должно быть заполнено'],
+    required: true,
   },
   image: {
     type: String,
-    required: [true, 'Поле "ссылка на постер к фильму" должно быть заполнено'],
+    required: true,
     validate: {
       validator(v) {
         return regularExpression.test(v);
@@ -34,7 +34,7 @@ const movieSchema = new mongoose.Schema({
   },
   trailerLink: {
     type: String,
-    required: [true, 'Поле "ссылка на трейлер фильма" должно быть заполнено'],
+    required: true,
     validate: {
       validator(v) {
         return regularExpression.test(v);
@@ -44,7 +44,7 @@ const movieSchema = new mongoose.Schema({
   },
   thumbnail: {
     type: String,
-    required: [true, 'Поле "миниатюрное изображение постера к фильму" должно быть заполнено'],
+    required: true,
     validate: {
       validator(v) {
         return regularExpression.test(v);
@@ -55,20 +55,19 @@ const movieSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
-    required: [true, 'Поле "_id пользователя" должно быть заполнено'],
+    required: true,
   },
   movieId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'movie',
-    required: [true, 'Поле "_id фильма" должно быть заполнено'],
+    type: Number,
+    required: true,
   },
   nameRU: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: true,
   },
   nameEN: {
     type: String,
-    required: [true, 'Поле должно быть заполнено'],
+    required: true,
   },
 });
 
