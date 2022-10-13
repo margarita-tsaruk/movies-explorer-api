@@ -8,6 +8,13 @@ const ErrorReqNotFound = require('../errors/errorReqNotFound');
 const ErrorBadReq = require('../errors/errorBadReq');
 const ErrorExistingUser = require('../errors/errorExistingUser');
 const AuthError = require('../errors/authError');
+const {
+  messageExistingEmail,
+  messageIncorrectData,
+  messageWrongAuth,
+  messageNonExistingId,
+} = require('../errors/errorsMessages');
+const { replyAuthSuccess, replySignoutSuccess } = require('../utils/replyMessages');
 
 const signup = (req, res, next) => {
   const {
@@ -23,9 +30,9 @@ const signup = (req, res, next) => {
     .then((newUser) => res.send(newUser))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ErrorExistingUser('Пользователь с таким email уже существует'));
+        next(new ErrorExistingUser(messageExistingEmail));
       } else if (err.name === 'ValidationError') {
-        next(new ErrorBadReq('Переданы некорректные данные при создании пользователя'));
+        next(new ErrorBadReq(messageIncorrectData));
       } else {
         next(err);
       }
@@ -39,7 +46,7 @@ const signin = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new AuthError('Неправильный пароль или email');
+        throw new AuthError(messageWrongAuth);
       }
       bcrypt.compare(password, user.password)
         .then((isUserValid) => {
@@ -54,9 +61,9 @@ const signin = (req, res, next) => {
               sameSite: false,
             });
 
-            res.send({ data: user.toJSON() });
+            res.send({ data: user.toJSON(), message: replyAuthSuccess });
           } else {
-            throw new AuthError('Неправильные почта или пароль');
+            throw new AuthError(messageWrongAuth);
           }
         })
         .catch(next);
@@ -67,10 +74,10 @@ const signin = (req, res, next) => {
 function signout(req, res, next) {
   try {
     if (!req.cookies) {
-      next(new ErrorReqNotFound('Пользователь с указанным _id не найден'));
+      next(new ErrorReqNotFound(messageIncorrectData));
       return;
     }
-    res.clearCookie('jwt').send({ message: 'Signout is successful' }).end();
+    res.clearCookie('jwt').send({ message: replySignoutSuccess }).end();
   } catch (err) {
     next(err);
   }
@@ -81,14 +88,12 @@ const getUser = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        next(new ErrorReqNotFound('Пользователь с указанным _id не найден'));
+        next(new ErrorReqNotFound(messageNonExistingId));
       } else {
         res.send(user);
       }
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const updateUser = (req, res, next) => {
@@ -101,9 +106,9 @@ const updateUser = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ErrorExistingUser('Пользователь с таким email уже существует'));
+        next(new ErrorExistingUser(messageExistingEmail));
       } else if (err.name === 'ValidationError') {
-        next(new ErrorBadReq('Переданы некорректные данные при обновлении профиля'));
+        next(new ErrorBadReq(messageIncorrectData));
       } else {
         next(err);
       }

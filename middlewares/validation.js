@@ -1,6 +1,14 @@
 const { ObjectId } = require('mongoose').Types;
 const { celebrate, Joi } = require('celebrate');
-const { regularExpression } = require('../utils/utils');
+const validator = require('validator');
+const { messageValidator } = require('../errors/errorsMessages');
+
+const validateURL = (value, helpers) => {
+  if (validator.isURL(value)) {
+    return value;
+  }
+  return helpers.message(messageValidator);
+};
 
 module.exports.validateMovieId = celebrate({
   params: Joi.object().keys({
@@ -22,9 +30,9 @@ module.exports.validateMovie = celebrate({
     description: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    image: Joi.string().required().regex(regularExpression),
-    trailerLink: Joi.string().required().regex(regularExpression),
-    thumbnail: Joi.string().required().regex(regularExpression),
+    image: Joi.string().required().custom(validateURL),
+    trailerLink: Joi.string().required().custom(validateURL),
+    thumbnail: Joi.string().required().custom(validateURL),
     movieId: Joi.number().required(),
   }),
 });

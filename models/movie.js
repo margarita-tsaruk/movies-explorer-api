@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { regularExpression } = require('../utils/utils');
+const { messageInputUrl } = require('../errors/errorsMessages');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return regularExpression.test(v);
       },
-      message: 'Введите url',
+      message: messageInputUrl,
     },
   },
   trailerLink: {
@@ -39,7 +40,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return regularExpression.test(v);
       },
-      message: 'Введите url',
+      message: messageInputUrl,
     },
   },
   thumbnail: {
@@ -49,7 +50,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return regularExpression.test(v);
       },
-      message: 'Введите url',
+      message: messageInputUrl,
     },
   },
   owner: {

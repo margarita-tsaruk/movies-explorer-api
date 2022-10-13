@@ -5,8 +5,9 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 const limiter = require('./utils/rateLimiter');
+const mongoAddress = require('./utils/mongoAddress');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, MONGO_URI } = process.env;
 const app = express();
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -15,7 +16,7 @@ const cors = require('./middlewares/cors');
 
 async function main() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/moviesdb', {
+    await mongoose.connect(NODE_ENV === 'production' ? MONGO_URI : mongoAddress, {
       useNewUrlParser: true,
       useUnifiedTopology: false,
     });
@@ -34,8 +35,8 @@ app.use(helmet());
 app.use(cors);
 app.use(cookieParser());
 app.use(express.json());
-app.use(limiter);
 app.use(requestLogger);
+app.use(limiter);
 
 app.use(require('./routes/index'));
 
