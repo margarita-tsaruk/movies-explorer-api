@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongoose').Types;
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const { messageValidator } = require('../errors/errorsMessages');
@@ -12,12 +11,7 @@ const validateURL = (value, helpers) => {
 
 module.exports.validateMovieId = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required().custom((value, helpers) => {
-      if (!ObjectId.isValid(value)) {
-        return helpers.error('any.invalid');
-      }
-      return value;
-    }),
+    movieId: Joi.number().required(),
   }),
 });
 
