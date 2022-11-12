@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const limiter = require('./utils/rateLimiter');
 const mongoAddress = require('./utils/mongoAddress');
 
-const { PORT = 4000, NODE_ENV, MONGO_URI } = process.env;
+const { PORT = 3000, NODE_ENV, MONGO_URI } = process.env;
 const app = express();
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
